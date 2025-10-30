@@ -18,6 +18,14 @@ public class Portal : MonoBehaviour {
     public float fadeDuration = 1f;
     public AudioClip portalSound;
 
+    public Material newSkybox;
+    public Material normalSkybox;
+
+    public Color normalFogColor;
+    public Color fantasyFogColor;
+    public float normalFogDensity = 0.02f;
+    public float fantasyFogDensity = 0.02f;
+
     private bool isInEnvironmentA = true;
     private bool isTransitioning = false;
 
@@ -50,12 +58,25 @@ public class Portal : MonoBehaviour {
         if (isInEnvironmentA) {
             environmentA.SetActive(false);
             environmentB.SetActive(true);
+            RenderSettings.skybox = newSkybox;
+            DynamicGI.UpdateEnvironment(); // refresh lighting if needed
+            RenderSettings.fog = true;                   // Enable fog
+            RenderSettings.fogColor = fantasyFogColor;       // Change fog color
+            RenderSettings.fogDensity = fantasyFogDensity;   // Adjust fog density
 
             if (spawnPointB)
                 player.position = spawnPointB.position;
         } else {
             environmentB.SetActive(false);
             environmentA.SetActive(true);
+            RenderSettings.skybox = normalSkybox;
+            RenderSettings.fog = true;                   // Enable fog
+            RenderSettings.fogColor = normalFogColor;       // Change fog color
+            RenderSettings.fogDensity = normalFogDensity;   // Adjust fog density
+            DynamicGI.UpdateEnvironment(); // refresh lighting if needed
+
+
+
 
             if (spawnPointA)
                 player.position = spawnPointA.position;
